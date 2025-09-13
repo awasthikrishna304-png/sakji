@@ -1,0 +1,58 @@
+import pygame
+import sys
+import math
+
+# Initialize pygame
+pygame.init()
+
+# Screen setup
+WIDTH, HEIGHT = 800, 500
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption("Mini Film Animation")
+
+# Colors
+WHITE = (255, 255, 255)
+SKY_BLUE = (135, 206, 235)
+DARK_BLUE = (25, 25, 112)
+SUN_YELLOW = (252, 212, 64)
+GREEN = (34, 139, 34)
+RED = (255, 50, 50)
+
+# Clock
+clock = pygame.time.Clock()
+time = 0
+
+# Main loop
+while True:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+
+    # Time update
+    time += 0.02
+    sky_color = (
+        int(135 - 110 * math.sin(time / 3)),
+        int(206 - 180 * math.sin(time / 3)),
+        int(235 - 200 * math.sin(time / 3))
+    )
+
+    # Background
+    screen.fill(sky_color)
+
+    # Sun animation
+    sun_x = WIDTH // 2 + 250 * math.cos(time / 2)
+    sun_y = HEIGHT // 2 - 200 * math.sin(time / 2)
+    pygame.draw.circle(screen, SUN_YELLOW, (int(sun_x), int(sun_y)), 40)
+
+    # Ground
+    pygame.draw.rect(screen, GREEN, (0, HEIGHT - 100, WIDTH, 100))
+
+    # Moving ball (hero)
+    ball_x = 100 + (time * 60) % (WIDTH - 200)
+    ball_y = HEIGHT - 120 - 50 * abs(math.sin(time))
+    pygame.draw.circle(screen, RED, (int(ball_x), int(ball_y)), 30)
+
+    # Update display
+    pygame.display.flip()
+    clock.tick(60)
